@@ -13,12 +13,13 @@ angular.module('flash', [])
   };
 
   $rootScope.$on('$stateChangeSuccess', emit);
+  $rootScope.$on('$httpRequest', emit);
 
   var asMessage = function(level, text) {
     if (!text) {
       text = level;
       level = 'success';
-    }
+    } 
     return { level: level, text: text };
   };
 
@@ -33,12 +34,8 @@ angular.module('flash', [])
     emit(messages = asArrayOfMessages(level, text));
   };
 
-  ['danger', 'error', 'warning', 'info', 'success'].forEach(function (level) {
-    
-    flash[level] = function (text) { flash(level, text); };
-    if(level == 'error') {
-        flash[level] == function(text){flash('danger', text);};
-    }
+  ['error', 'warning', 'info', 'success'].forEach(function (level) {
+	flash[level] = function (text) { flash(level, text); };
   });
 
   return flash;
@@ -47,11 +44,14 @@ angular.module('flash', [])
 .directive('flashMessages', [function() {
   var directive = { restrict: 'EA', replace: true };
   directive.template =
-    '<alert ng-repeat="m in messages" type="m.level">{{m.text}}</alert>';
+    '<alert ng-repeat="m in messages" type="getAlertType(m.level)">{{m.text}}</alert>';
 
   directive.controller = ['$scope', '$rootScope', function($scope, $rootScope) {
     $rootScope.$on('flash:message', function(_, messages, done) {
       $scope.messages = messages;
+	  $scope.getAlertType = function(level) {
+		return level == 'error' ? 'danger': level;
+	  }
       done();
     });
   }];
