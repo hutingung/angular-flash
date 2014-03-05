@@ -4,7 +4,7 @@
   "description"        : "Angular.js Flash Messages",
   "repository"         : {
     "type"             : "git",
-    "url"              : "https://github.com/gtramontina/angular-flash.git"
+    "url"              : "https://github.com/hutingung/angular-flash.git"
   },
   "scripts"            : {
     "postinstall"      : "bower install",
